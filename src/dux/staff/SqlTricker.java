@@ -77,7 +77,7 @@ public class SqlTricker {
 
 	public static String makeSelectSql(String sqlStatement) {
 
-	    String validInsert   = "INSERT[ ]+INTO[ ]+(.+?)[ ]*\\((.*)\\)[ ]+VALUES[ ]+\\((.*)\\)";
+	    String validInsert   = "INSERT[ ]+INTO[ ]+(.+?)[ ]*\\((.*)\\)[ ]*VALUES[ ]*\\((.*)\\)";
 	    String invalidInsert = "INSERT[ ]+INTO[ ]+([^\\(]?)[ ]+VALUES[ ]+\\((.*)\\)";
 	    String selectSql = null;
 
