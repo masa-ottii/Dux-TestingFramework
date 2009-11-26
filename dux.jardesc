@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jardesc>
-<jar path="/Users/ottii/Desktop/dux-0.1.jar"/>
+<jar path="/Users/ottii/Desktop/dux-0.1.1.jar"/>
 <options buildIfNeeded="true" compress="true" descriptionLocation="/Dux/dux.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
 <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
 <selectedProjects/>
@@ -15,7 +15,7 @@
 <javaElement handleIdentifier="=Dux/src&lt;dux"/>
 <javaElement handleIdentifier="=Dux/src&lt;dux.runner.staff.data"/>
 <javaElement handleIdentifier="=Dux/src&lt;dux.annotate"/>
-<javaElement handleIdentifier="=Dux/src&lt;dux.runner.staff"/>
 <javaElement handleIdentifier="=Dux/src&lt;dux.staff"/>
+<javaElement handleIdentifier="=Dux/src&lt;dux.runner.staff"/>
 </selectedElements>
 </jardesc>

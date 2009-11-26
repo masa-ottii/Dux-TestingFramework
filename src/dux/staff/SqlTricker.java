@@ -20,7 +20,7 @@ public class SqlTricker {
 	    Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
 	    ArrayList<String> tableNames = new ArrayList<String>();
 
-	    // 正規表現を使用してINSERT文からテーブル名を抽出
+	    // use RegEx to select table name  from INSERT statement 
 		for(String command : commandList){
 			    Matcher m = p.matcher(command);
 			    m.reset();
@@ -28,7 +28,7 @@ public class SqlTricker {
 			    	tableNames.add(m.group(1));
 			     }
 		}
-		// テーブル名の重複を削除
+		// delete duplication of table name
 		Set<String> set = new HashSet<String>(tableNames);
 		ArrayList<String> uniqueTableNames = new ArrayList<String>(set);
 		return uniqueTableNames;
