@@ -10,21 +10,22 @@ import dux.Manipulator;
 import dux.runner.staff.data.CommandGenerator;
 
 public class DataTricker {
-	
-	protected DataTricker(){}
-	
-	public static void deleteAndInsertTestData(Manipulator manipulator,CommandGenerator generator)  throws Exception {
+
+	protected DataTricker() {
+	}
+
+	public static void deleteAndInsertTestData(Manipulator manipulator, CommandGenerator generator) throws Exception {
 
 		try {
 			List<String> deleteSqlArray = generator.getDeleteCommands();
 			List<String> insertSqlArray = generator.getInsertCommands();
 
 			for (String deleteSql : deleteSqlArray) {
-System.out.println("EXECUTE : " + deleteSql);
+				System.out.println("EXECUTE : " + deleteSql);
 				manipulator.delete(deleteSql);
 			}
 			for (String insertSql : insertSqlArray) {
-System.out.println("EXECUTE : " + insertSql);
+				System.out.println("EXECUTE : " + insertSql);
 				manipulator.insert(insertSql);
 			}
 			manipulator.commit();
@@ -34,22 +35,20 @@ System.out.println("EXECUTE : " + insertSql);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public static List<String> readResource(Object srcObject,String commandFile) throws Exception {
+	public static List<String> readResource(Object srcObject, String commandFile) throws Exception {
 
 		if (!commandFile.startsWith("/")) {
 			commandFile = "/" + commandFile;
 		}
 		Class c = srcObject.getClass();
 		URL url = c.getResource(commandFile);
-		if(url==null){
-			throw new IllegalArgumentException("cannot find the sql resource file :" + commandFile );
+		if (url == null) {
+			throw new IllegalArgumentException("cannot find the sql resource file :" + commandFile);
 		}
 		InputStream is = url.openStream();
 		String scripts = readAllScript(is);
-		return SqlTricker.makeSqlList(scripts,SqlTricker.DELIMITER);
+		return SqlTricker.makeSqlList(scripts, SqlTricker.DELIMITER);
 	}
-
 
 	protected static String readAllScript(InputStream input) throws Exception {
 
@@ -58,7 +57,7 @@ System.out.println("EXECUTE : " + insertSql);
 
 		while (reader.ready()) {
 			String line = reader.readLine();
-			if( line.startsWith("-- ") ||  line.equals("")){
+			if (line.startsWith("-- ") || line.equals("")) {
 				continue;
 			}
 			line = line.replace('\t', ' ');

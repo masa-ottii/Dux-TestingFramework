@@ -7,26 +7,26 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class SqlTricker {
-	
+
 	public static final char DELIMITER = ';';
-	
-	protected SqlTricker(){}
 
-	public static List<String> extractDeletedTable(List<String> commandList ){
+	protected SqlTricker() {
+	}
 
-	    String regex = "INSERT[ ]+INTO[ ]+(.+?)[ (]+";
-	    Pattern p = Pattern.compile(regex,Pattern.CASE_INSENSITIVE);
-	    ArrayList<String> tableNames = new ArrayList<String>();
+	public static List<String> extractDeletedTable(List<String> commandList) {
 
-	    // use RegEx to select table name  from INSERT statement 
-		for(String command : commandList){
-			    Matcher m = p.matcher(command);
-			    m.reset();
-			    while(m.find()){
-			    	tableNames.add(m.group(1));
-			     }
+		String regex = "INSERT[ ]+INTO[ ]+(.+?)[ (]+";
+		Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		ArrayList<String> tableNames = new ArrayList<String>();
+
+		// use RegEx to select table name  from INSERT statement 
+		for (String command : commandList) {
+			Matcher m = p.matcher(command);
+			m.reset();
+			while (m.find()) {
+				tableNames.add(m.group(1));
+			}
 		}
 		// delete duplication of table name
 		Set<String> set = new HashSet<String>(tableNames);
@@ -34,12 +34,11 @@ public class SqlTricker {
 		return uniqueTableNames;
 	}
 
-
 	public static List<String> makeDeleteSqlList(List<String> tableNameList) {
 
-	    ArrayList<String> deleteCommandList = new ArrayList<String>();
+		ArrayList<String> deleteCommandList = new ArrayList<String>();
 
-		for(String tableName : tableNameList){
+		for (String tableName : tableNameList) {
 			deleteCommandList.add("DELETE FROM " + tableName);
 		}
 		return deleteCommandList;
@@ -59,12 +58,11 @@ public class SqlTricker {
 			}
 			if (content[i] == delim && !isInLiteral) {
 				if (statement.length() > 0) {
-					statement.append(content[i]);
+					//statement.append(content[i]);
 					commandList.add(statement.toString());
 					statement = new StringBuffer();
 				}
-			}
-			else {
+			} else {
 				statement.append(content[i]);
 			}
 		}
@@ -74,21 +72,20 @@ public class SqlTricker {
 		return commandList;
 	}
 
-
 	public static String makeSelectSql(String sqlStatement) {
 
-	    String validInsert   = "INSERT[ ]+INTO[ ]+(.+?)[ ]*\\((.*)\\)[ ]*VALUES[ ]*\\((.*)\\)";
-	    String invalidInsert = "INSERT[ ]+INTO[ ]+([^\\(]?)[ ]+VALUES[ ]+\\((.*)\\)";
-	    String selectSql = null;
+		String validInsert = "INSERT[ ]+INTO[ ]+(.+?)[ ]*\\((.*)\\)[ ]*VALUES[ ]*\\((.*)\\)";
+		String invalidInsert = "INSERT[ ]+INTO[ ]+([^\\(]?)[ ]+VALUES[ ]+\\((.*)\\)";
+		String selectSql = null;
 
-	    // invalid INSERT statement check
-		if(Pattern.compile(invalidInsert,Pattern.CASE_INSENSITIVE).matcher(sqlStatement).find()){
+		// invalid INSERT statement check
+		if (Pattern.compile(invalidInsert, Pattern.CASE_INSENSITIVE).matcher(sqlStatement).find()) {
 			throw new IllegalArgumentException("cannot omit the column names of the INSERT statement");
 		}
 
-	    Matcher m = Pattern.compile(validInsert,Pattern.CASE_INSENSITIVE).matcher(sqlStatement);
+		Matcher m = Pattern.compile(validInsert, Pattern.CASE_INSENSITIVE).matcher(sqlStatement);
 		m.reset();
-		if(m.find()){
+		if (m.find()) {
 
 			String tableName = m.group(1);
 			selectSql = "SELECT COUNT(*) FROM " + tableName + " WHERE ";
@@ -96,11 +93,11 @@ public class SqlTricker {
 			String[] columnNames = m.group(2).split(",");
 			String[] values = m.group(3).split(",");
 
-			if(columnNames.length != values.length){
+			if (columnNames.length != values.length) {
 				throw new IllegalArgumentException("column names and values are not equal of the INSERT statement");
-			}else{
-				for(int i=0 ;  i < columnNames.length  ; i++ ){
-					if(i != 0){
+			} else {
+				for (int i = 0; i < columnNames.length; i++) {
+					if (i != 0) {
 						selectSql += " and ";
 					}
 					selectSql += columnNames[i].trim() + "=" + values[i].trim();
